@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { FarmerDetails, Plots } from "@/app/components/utils/dummyData";
 import { selectedPlot } from "../../utils/types";
 import { AnimatePresence, motion } from "framer-motion";
@@ -196,6 +196,7 @@ export const MapCardClient = () => {
                       name: FarmerDetails[area.farmerId - 1].name,
                       farmerImage: FarmerDetails[area.farmerId - 1].farmerImage,
                       noOfPlots: FarmerDetails[area.farmerId - 1].noOfPlots,
+                      phone: FarmerDetails[area.farmerId - 1].phone,
                     });
                   },
                 }}

@@ -1,5 +1,5 @@
 import { Users, Leaf, LandPlot } from "lucide-react";
-export default function DashboardHero() {
+export default function FarmersHero() {
   const heroData = [
     {
       name: "Some Data1",

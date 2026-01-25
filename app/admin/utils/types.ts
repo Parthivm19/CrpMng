@@ -1,5 +1,6 @@
 import { LatLngTuple } from "leaflet";
 export interface plotType {
+  agentId: number;
   plotId: number;
   farmerId: number;
   crop: string;
@@ -9,10 +10,19 @@ export interface plotType {
 }
 
 export interface farmerType {
+  agentId: number;
   farmerId: number;
   name: string;
   noOfPlots: number;
   farmerImage: string;
+  phone: string;
 }
 
+export interface AgentType {
+  agentId: number;
+  agentPic: string;
+  agentName: string;
+  agentMail: string;
+  agentPass: string;
+}
 export interface selectedPlot extends plotType, farmerType {}

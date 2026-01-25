@@ -1,6 +1,8 @@
-import { plotType, farmerType } from "@/app/admin/utils/types";
+import { plotType, farmerType, AgentType } from "@/app/admin/utils/types";
+
 export const Plots: plotType[] = [
   {
+    agentId: 1,
     plotId: 1,
     farmerId: 1,
     location: "Kochi",
@@ -14,6 +16,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=1",
   },
   {
+    agentId: 1,
     plotId: 2,
     farmerId: 1,
     location: "Kochi",
@@ -28,6 +31,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=2",
   },
   {
+    agentId: 1,
     plotId: 3,
     farmerId: 1,
     location: "Kochi",
@@ -41,6 +45,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=3",
   },
   {
+    agentId: 1,
     plotId: 4,
     farmerId: 2,
     location: "Kochi",
@@ -54,6 +59,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=4",
   },
   {
+    agentId: 1,
     plotId: 5,
     farmerId: 2,
     location: "Kochi",
@@ -67,6 +73,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=5",
   },
   {
+    agentId: 2,
     plotId: 6,
     farmerId: 3,
     location: "Thiruvananthapuram",
@@ -80,6 +87,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=6",
   },
   {
+    agentId: 2,
     plotId: 7,
     farmerId: 3,
     location: "Thiruvananthapuram",
@@ -93,6 +101,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=7",
   },
   {
+    agentId: 2,
     plotId: 8,
     farmerId: 3,
     location: "Thiruvananthapuram",
@@ -106,6 +115,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=8",
   },
   {
+    agentId: 3,
     plotId: 9,
     farmerId: 4,
     location: "Kozhikode",
@@ -119,6 +129,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=9",
   },
   {
+    agentId: 3,
     plotId: 10,
     farmerId: 4,
     location: "Kozhikode",
@@ -132,6 +143,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=10",
   },
   {
+    agentId: 4,
     plotId: 11,
     farmerId: 5,
     location: "Thrissur",
@@ -145,6 +157,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=11",
   },
   {
+    agentId: 4,
     plotId: 12,
     farmerId: 5,
     location: "Thrissur",
@@ -158,6 +171,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=12",
   },
   {
+    agentId: 5,
     plotId: 13,
     farmerId: 6,
     location: "Alappuzha",
@@ -171,6 +185,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=13",
   },
   {
+    agentId: 5,
     plotId: 14,
     farmerId: 6,
     location: "Alappuzha",
@@ -184,6 +199,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=14",
   },
   {
+    agentId: 6,
     plotId: 15,
     farmerId: 7,
     location: "Kottayam",
@@ -197,6 +213,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=15",
   },
   {
+    agentId: 6,
     plotId: 16,
     farmerId: 7,
     location: "Kottayam",
@@ -210,6 +227,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=16",
   },
   {
+    agentId: 7,
     plotId: 17,
     farmerId: 8,
     location: "Palakkad",
@@ -223,6 +241,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=17",
   },
   {
+    agentId: 7,
     plotId: 18,
     farmerId: 8,
     location: "Palakkad",
@@ -236,6 +255,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=18",
   },
   {
+    agentId: 8,
     plotId: 19,
     farmerId: 9,
     location: "Kannur",
@@ -249,6 +269,7 @@ export const Plots: plotType[] = [
     plotImage: "https://picsum.photos/500/400?random=19",
   },
   {
+    agentId: 8,
     plotId: 20,
     farmerId: 9,
     location: "Kannur",
@@ -263,101 +284,136 @@ export const Plots: plotType[] = [
   },
 ];
 
+export const Agents: AgentType[] = [
+  {
+    agentId: 1,
+    agentName: "Vikram Singh",
+    agentMail: "vikram.singh@farmnet.com",
+    agentPass: "pass123@Vikram",
+    agentPic: "https://picsum.photos/200/200?random=201",
+  },
+  {
+    agentId: 2,
+    agentName: "Anjali Menon",
+    agentMail: "anjali.menon@farmnet.com",
+    agentPass: "pass123@Anjali",
+    agentPic: "https://picsum.photos/200/200?random=202",
+  },
+  {
+    agentId: 3,
+    agentName: "Rohan Patel",
+    agentMail: "rohan.patel@farmnet.com",
+    agentPass: "pass123@Rohan",
+    agentPic: "https://picsum.photos/200/200?random=203",
+  },
+  {
+    agentId: 4,
+    agentName: "Deepa Iyer",
+    agentMail: "deepa.iyer@farmnet.com",
+    agentPass: "pass123@Deepa",
+    agentPic: "https://picsum.photos/200/200?random=204",
+  },
+  {
+    agentId: 5,
+    agentName: "Suresh Kumar",
+    agentMail: "suresh.kumar@farmnet.com",
+    agentPass: "pass123@Suresh",
+    agentPic: "https://picsum.photos/200/200?random=205",
+  },
+  {
+    agentId: 6,
+    agentName: "Priya Nair",
+    agentMail: "priya.nair@farmnet.com",
+    agentPass: "pass123@Priya",
+    agentPic: "https://picsum.photos/200/200?random=206",
+  },
+  {
+    agentId: 7,
+    agentName: "Arjun Verma",
+    agentMail: "arjun.verma@farmnet.com",
+    agentPass: "pass123@Arjun",
+    agentPic: "https://picsum.photos/200/200?random=207",
+  },
+  {
+    agentId: 8,
+    agentName: "Meera Pillai",
+    agentMail: "meera.pillai@farmnet.com",
+    agentPass: "pass123@Meera",
+    agentPic: "https://picsum.photos/200/200?random=208",
+  },
+];
+
 export const FarmerDetails: farmerType[] = [
   {
+    agentId: 1,
     farmerId: 1,
     name: "Rajesh Kumar",
     noOfPlots: 3,
     farmerImage: "https://picsum.photos/150/150?random=101",
+    phone: "+91-9876543201",
   },
   {
+    agentId: 1,
     farmerId: 2,
     name: "Priya Sharma",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=102",
+    phone: "+91-9876543202",
   },
   {
+    agentId: 2,
     farmerId: 3,
     name: "Arun Nair",
     noOfPlots: 3,
     farmerImage: "https://picsum.photos/150/150?random=103",
+    phone: "+91-9876543203",
   },
   {
+    agentId: 3,
     farmerId: 4,
     name: "Meera Pillai",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=104",
+    phone: "+91-9876543204",
   },
   {
+    agentId: 4,
     farmerId: 5,
     name: "Vijay Kumar",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=105",
+    phone: "+91-9876543205",
   },
   {
+    agentId: 5,
     farmerId: 6,
     name: "Sneha Patel",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=106",
+    phone: "+91-9876543206",
   },
   {
+    agentId: 6,
     farmerId: 7,
     name: "Harish Menon",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=107",
+    phone: "+91-9876543207",
   },
   {
+    agentId: 7,
     farmerId: 8,
     name: "Lakshmi Iyer",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=108",
+    phone: "+91-9876543208",
   },
   {
+    agentId: 8,
     farmerId: 9,
     name: "Sanjay Verma",
     noOfPlots: 2,
     farmerImage: "https://picsum.photos/150/150?random=109",
+    phone: "+91-9876543209",
   },
 ];
-// export const Locations = [
-//   {
-//     name: "Kochi",
-//     latitude: 9.9312,
-//     longitude: 76.2673,
-//   },
-//   {
-//     name: "Thiruvananthapuram",
-//     latitude: 8.5241,
-//     longitude: 76.9366,
-//   },
-//   {
-//     name: "Kozhikode",
-//     latitude: 11.2588,
-//     longitude: 75.7804,
-//   },
-//   {
-//     name: "Thrissur",
-//     latitude: 10.5276,
-//     longitude: 76.2144,
-//   },
-//   {
-//     name: "Alappuzha",
-//     latitude: 9.4981,
-//     longitude: 76.3388,
-//   },
-//   {
-//     name: "Kottayam",
-//     latitude: 9.5916,
-//     longitude: 76.5222,
-//   },
-//   {
-//     name: "Palakkad",
-//     latitude: 10.7867,
-//     longitude: 76.6548,
-//   },
-//   {
-//     name: "Kannur",
-//     latitude: 11.8745,
-//     longitude: 75.3704,
-//   },
-// ];
