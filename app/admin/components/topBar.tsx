@@ -8,7 +8,7 @@ export default function TopBar() {
 
   const dashboardItems = [
     { label: "Dashboard", href: "/admin" },
-    { label: "Accomodation", href: "/admin/accomedation" },
+    { label: "Plantings", href: "/admin/plantings" },
     { label: "Transport", href: "/admin/transport" },
     { label: "Energy", href: "/admin/energy" },
     { label: "Water", href: "/admin/water" },
@@ -21,7 +21,7 @@ export default function TopBar() {
   return (
     <div className="flex justify-between items-center mt-5 ml-3 ">
       <div className="border border-neutral-400 rounded-3xl px-4 py-2">
-        <p className="text-xl font-light">Seva App</p>
+        <p className="text-xl font-light">Crop App</p>
       </div>
       <div className="flex items-center space-x-4">
         <div className="bg-white/50 shadow overflow-hidden flex items-center h-14 space-x-2 rounded-full">

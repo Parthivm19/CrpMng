@@ -1,4 +1,4 @@
-import { Car, Recycle, Users } from "lucide-react";
+import { Users, Leaf, LandPlot } from "lucide-react";
 export default function DashboardHero() {
   const heroData = [
     {
@@ -28,9 +28,9 @@ export default function DashboardHero() {
   ];
 
   const employeeStats = [
-    { value: 78, label: "Population", icon: Users },
-    { value: 56, label: "Waste Collected", icon: Recycle },
-    { value: 203, label: "Transportation", icon: Car },
+    { value: 78, label: "Farmers", icon: Users },
+    { value: 56, label: "Crops", icon: Leaf },
+    { value: 203, label: "Farms", icon: LandPlot },
   ];
 
   return (
@@ -38,15 +38,21 @@ export default function DashboardHero() {
       <div className="flex flex-col w-full  ">
         <p className="text-6xl font-semibold">Welcome in, Admin</p>
         <div className="flex w-full justify-between space-x-4 mt-12">
-          <div className="flex">
-            {heroData.map((data, i) => (
-              <div key={i} className="flex flex-col items-center">
-                <p className="mb-2 text-gray-600">{data.name}</p>
-                <div className={data.style}>
-                  <p className="font-semibold">{data.percentage}</p>
+          <div className="flex-col">
+            <div className="flex">
+              {heroData.map((data, i) => (
+                <div key={i} className="flex flex-col items-center">
+                  <p className="mb-2 text-gray-600">{data.name}</p>
+                  <div className={data.style}>
+                    <p className="font-semibold">{data.percentage}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <input
+              className="w-full bg-white/90 mt-4 rounded-full h-12 px-4 shadow focus:outline-none"
+              placeholder="Search Crops"
+            />
           </div>
           <div className="flex space-x-16 pr-16">
             {employeeStats.map((stat, i) => (
