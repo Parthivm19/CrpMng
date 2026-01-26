@@ -26,3 +26,12 @@ export interface AgentType {
   agentPass: string;
 }
 export interface selectedPlot extends plotType, farmerType {}
+
+export interface PlotDets extends plotType {
+  fid: farmerType;
+}
+
+export interface fullFarmerDetails extends farmerType {
+  crops: string[];
+  locations: string[];
+}

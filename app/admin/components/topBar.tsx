@@ -4,7 +4,7 @@ import { Settings, Bell, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 export default function TopBar() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const dashboardItems = [
     { label: "Dashboard", href: "/admin" },
     { label: "Plantings", href: "/admin/plantings" },

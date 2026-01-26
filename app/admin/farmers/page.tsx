@@ -6,6 +6,7 @@ export default function FarmerDetails() {
   const [selectedCrop, setSelectedCrop] = useState("Select Crop");
   const [selectedLocation, setSelectedLocation] = useState("Select Area");
   const [searchValue, setSearchValue] = useState("");
+
   return (
     <>
       <FarmersHero

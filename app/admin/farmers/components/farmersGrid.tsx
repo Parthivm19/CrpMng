@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { Plots, FarmerDetails } from "@/app/components/utils/dummyData";
-import { selectedPlot } from "../../utils/types";
+import { fullFarmerDetails, selectedPlot } from "../../utils/types";
 import { MapPin, Phone, Sprout, User } from "lucide-react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const FarmersCard = ({ farmer }: { farmer: selectedPlot }) => {
+const FarmersCard = ({ farmer }: { farmer: fullFarmerDetails }) => {
   return (
     <div className="group relative bg-white rounded-xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:border-green-200">
       <div className="absolute inset-0 bg-gradient-to-br from-green-50/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -48,7 +50,7 @@ const FarmersCard = ({ farmer }: { farmer: selectedPlot }) => {
             <div className="min-w-0">
               <p className="text-xs text-gray-500">Location</p>
               <p className="text-sm font-medium text-gray-900 truncate">
-                {farmer.location}
+                {farmer.locations[0]}
               </p>
             </div>
           </div>
@@ -85,16 +87,6 @@ const FarmersCard = ({ farmer }: { farmer: selectedPlot }) => {
     </div>
   );
 };
-export const SelectedPlots: selectedPlot[] = Plots.map((plot) => {
-  const farmer = FarmerDetails.find((f) => f.farmerId === plot.farmerId);
-
-  if (!farmer) return null;
-
-  return {
-    ...plot,
-    ...farmer,
-  };
-}).filter((item): item is selectedPlot => item !== null);
 
 export const FarmersGrid = ({
   selectedCrop,
@@ -105,33 +97,63 @@ export const FarmersGrid = ({
   selectedLocation: string;
   searchValue: string;
 }) => {
-  const filteredPlots = SelectedPlots.filter((data) => {
-    const search = searchValue.trim().toLowerCase();
-    const searchMatch =
-      search === "" ||
-      String(data.farmerId).includes(search) ||
-      data.name.toLowerCase().includes(search);
+  const [farmerDetails, setFarmerDetails] = useState<
+    fullFarmerDetails[] | null
+  >(null);
+  const [filteredFarmerDetails, setFilteredFarmerDetails] = useState<
+    fullFarmerDetails[] | null
+  >(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await axios.get(
+        process.env.NEXT_PUBLIC_BACKEND_URL + "/getFarmerDets",
+      );
+      setFarmerDetails(res.data.data);
+      console.log(res.data.data);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    console.log(searchValue, "MNake it pass the passion");
+    if (farmerDetails) {
+      const filteredPlots: fullFarmerDetails[] = farmerDetails.filter(
+        (data) => {
+          const search = searchValue.trim().toLowerCase();
+          const searchMatch =
+            search === "" ||
+            String(data.farmerId).includes(search) ||
+            data.name.toLowerCase().includes(search);
 
-    const locationMatch =
-      selectedLocation === "Select Area" || data.location === selectedLocation;
+          const locationMatch =
+            selectedLocation === "Select Area" ||
+            data.locations.includes(selectedLocation);
 
-    const cropMatch =
-      selectedCrop === "Select Crop" || data.crop === selectedCrop;
+          const cropMatch =
+            selectedCrop === "Select Crop" || data.crops.includes(selectedCrop);
 
-    return searchMatch && locationMatch && cropMatch;
-  });
-  return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-5 mt-10">
-        {filteredPlots.map((farmer, i) => (
-          <FarmersCard key={i} farmer={farmer} />
-        ))}
-      </div>
-      {FarmerDetails.length === 0 && (
-        <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No farmers found</p>
+          return searchMatch && locationMatch && cropMatch;
+        },
+      );
+      setFilteredFarmerDetails(filteredPlots);
+    }
+  }, [searchValue, selectedCrop, selectedLocation]);
+  if (farmerDetails != null) {
+    const dataRender = filteredFarmerDetails
+      ? filteredFarmerDetails
+      : farmerDetails;
+    return (
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-5 mt-10">
+          {dataRender.map((farmer, i) => (
+            <FarmersCard key={i} farmer={farmer} />
+          ))}
         </div>
-      )}
-    </div>
-  );
+        {FarmerDetails.length === 0 && (
+          <div className="text-center py-12 bg-gray-50 rounded-lg">
+            <p className="text-gray-500">No farmers found</p>
+          </div>
+        )}
+      </div>
+    );
+  }
 };
