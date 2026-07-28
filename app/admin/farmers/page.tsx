@@ -70,7 +70,7 @@ export default function FarmerDetails() {
     console.log(res.data.data);
   };
   const inputs = Object.keys(newType?.inputs || {});
-
+  console.log("HI", inputs);
   type formDataType = {
     [K in (typeof inputs)[number]]: string;
   };

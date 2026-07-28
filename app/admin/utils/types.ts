@@ -2,11 +2,12 @@ import { LatLngTuple } from "leaflet";
 
 export interface plotType {
   agentId: number;
-  plotId: number;
+  plotId?: number;
+  status:boolean;
   farmerId: number;
-  crop: string;
+  cropId:number;
   location: string;
-  plot: LatLngTuple[];
+  plotCords: LatLngTuple[];
   plotImage: string;
 }
 
@@ -14,21 +15,23 @@ export interface farmerType {
   agentId: number;
   farmerId: number;
   farmerName: string;
-  noOfPlots: number;
-  farmerPic: string;
+  noOfPlots?: number;
+  farmerPic?: string;
   phone?: string;
 }
 
 export interface AgentType {
   agentId: number;
-  agentPic: string;
-  agentName: string;
-  agentMail: string;
-  agentPass: string;
+  agentPic?: string;
+  agentName?: string;
+  agentMail?: string;
+  agentPass?: string;
 }
-export interface selectedPlot extends plotType, farmerType {}
+export interface selectedPlot extends plotType, farmerType, AgentType {
+  crop:CropType|null
+}
 
-export interface PlotDets extends plotType {
+export interface PlotDets extends plotType,CropType {
   fid: farmerType;
 }
 
@@ -58,18 +61,18 @@ export interface CropStats {
   totalArea: number;
 }
 
-export interface CropGridType {
+export interface CropType {
   cropId: number;
   cropName: string;
-  cropImage: string;
+  cropImage?: string;
   cropDesc?: string;
-  cropColor: string;
-  stats: {
+  cropColor?: string;
+  stats?: {
     totalFarmers: number;
     totalPlots: number;
   };
 }
-export interface IndivitualCrop extends CropGridType {
+export interface IndivitualCrop extends CropType {
   plots: {
     pid: {
       plotCords: LatLngTuple[];
@@ -107,4 +110,23 @@ export interface filterType {
   filterValue: string[];
   filterDrop: boolean;
   filterSelected: string;
+}
+
+
+export interface fullPlotDetails extends selectedPlot {
+  cropData: {
+    cropStages: {
+      stagename: string;
+      duration:number;
+      cropsubstages: {
+        substagename: string;
+        cropsubstagesvalues: {
+          plotsubstagevalues: {
+            name: string;
+            data: string;
+          }[];
+        }[];
+      }[];
+    }[];
+  }[];
 }

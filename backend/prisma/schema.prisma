@@ -15,6 +15,7 @@ model agent {
   agentPic   String
   farmers    farmer[]
 }
+
 enum Gender {
   Male
   Female
@@ -31,30 +32,31 @@ enum LandHoldingType {
 }
 
 model farmer {
-  farmerId            Int               @id @default(autoincrement())
-  farmerName          String            @default("")
-  farmerFather        String @default("")
-  farmerPic           String @default("")
-  address             String @default("")
-  country             String    @default("")
-  district            String    @default("")
-  tehsil              String     @default("")
-  village             String @default("")
-  season              String  @default("")
-  phone               String     @default("")
-  farmCode            Int      @default(0)
-  aadharNumber        String   @default("")
-  farmerAge           Int  @default(0)
-  migrantStatus       MigrantStatus @default(Local)
-  landHoldingType     LandHoldingType @default(Own)
-  farmerAssociation   String   @default("")
-  state               String  @default("")
-  gender              Gender @default(Male)
-  agentId             Int
-  aaid                agent             @relation(fields: [agentId], references: [agentId])
-  plots               plot[]
-  farmercropstables   farmercropstable[]
+  farmerId          Int                @id @default(autoincrement())
+  farmerName        String             @default("")
+  farmerFather      String             @default("")
+  farmerPic         String             @default("")
+  address           String             @default("")
+  country           String             @default("")
+  district          String             @default("")
+  tehsil            String             @default("")
+  village           String             @default("")
+  season            String             @default("")
+  phone             String             @default("")
+  farmCode          Int                @default(0)
+  aadharNumber      String             @default("")
+  farmerAge         Int                @default(0)
+  migrantStatus     MigrantStatus      @default(Local)
+  landHoldingType   LandHoldingType    @default(Own)
+  farmerAssociation String             @default("")
+  state             String             @default("")
+  gender            Gender             @default(Male)
+  agentId           Int
+  aaid              agent              @relation(fields: [agentId], references: [agentId])
+  plots             plot[]
+  farmercropstables farmercropstable[]
 }
+
 model plot {
   plotId             Int                 @id @default(autoincrement())
   farmerId           Int
@@ -62,9 +64,12 @@ model plot {
   address            String
   location           String
   plotImage          String
+  status             Boolean             @default(true)
   fid                farmer              @relation(fields: [farmerId], references: [farmerId], onDelete: Cascade)
   cropplottables     cropplottable[]
   plotsubstagevalues plotsubstagevalue[]
+  plotstagevalues    plotstagevalue[]
+  plotweatherDatas   plotweatherData[]
 }
 
 model crop {
@@ -72,7 +77,7 @@ model crop {
   cropName          String
   cropDesc          String
   cropImage         String
-  cropColor         String @default("#C92F0A")
+  cropColor         String             @default("#C92F0A")
   farmercropstables farmercropstable[]
   cropplottables    cropplottable[]
   cropStages        cropstages[]
@@ -81,31 +86,30 @@ model crop {
 model farmercropstable {
   cropId   Int
   farmerId Int
-  fid      farmer @relation(fields: [farmerId], references: [farmerId],onDelete: Cascade)
-  cid      crop   @relation(fields: [cropId], references: [cropId],onDelete:  Cascade)
+  fid      farmer @relation(fields: [farmerId], references: [farmerId], onDelete: Cascade)
+  cid      crop   @relation(fields: [cropId], references: [cropId], onDelete: Cascade)
 
   @@id([cropId, farmerId])
 }
 
 model cropplottable {
   cropId Int
-  plotId Int
-  cid    crop @relation(fields: [cropId], references: [cropId],onDelete: Cascade)
-  pid    plot @relation(fields: [plotId], references: [plotId],onDelete: Cascade)
+  plotId Int  @unique
+  cid    crop @relation(fields: [cropId], references: [cropId], onDelete: Cascade)
+  pid    plot @relation(fields: [plotId], references: [plotId], onDelete: Cascade)
 
   @@id([cropId, plotId])
 }
 
 model cropstages {
-  sid           Int             @id @default(autoincrement())
-  stagename     String
-  cropId        Int
-  stagenumber   Int             @default(0)
-  duration      Int            @default(0)
-  startedAt     DateTime       @default(now())
-  endDate       DateTime       @default(now())
-  cid           crop            @relation(fields: [cropId], references: [cropId],onDelete: Cascade)
-  cropsubstages cropsubstages[]
+  sid             Int              @id @default(autoincrement())
+  stagename       String
+  cropId          Int
+  stagenumber     Int              @default(0)
+  duration        Int              @default(0)
+  cid             crop             @relation(fields: [cropId], references: [cropId], onDelete: Cascade)
+  cropsubstages   cropsubstages[]
+  plotstagevalues plotstagevalue[]
 }
 
 model cropsubstages {
@@ -113,7 +117,7 @@ model cropsubstages {
   stageid             Int
   substagename        String
   substagenumber      Int                  @default(0)
-  stageId             cropstages           @relation(fields: [stageid], references: [sid],onDelete: Cascade)
+  stageId             cropstages           @relation(fields: [stageid], references: [sid], onDelete: Cascade)
   cropsubstagesvalues cropsubstagesvalue[]
 }
 
@@ -122,17 +126,47 @@ model cropsubstagesvalue {
   substageid           Int
   substagecoloumn      String
   substagecoloumnvalue String
-  substage             cropsubstages       @relation(fields: [substageid], references: [substageid],onDelete: Cascade)
+  substage             cropsubstages       @relation(fields: [substageid], references: [substageid], onDelete: Cascade)
   plotsubstagevalues   plotsubstagevalue[]
+}
+
+enum Status {
+  Pending
+  Current
+  Finished
+}
+
+model plotstagevalue {
+  cropstageid        Int
+  plotId             Int
+  status             Status              @default(Pending)
+  startdate          DateTime?
+  endDate            DateTime?
+  plotstagevalue     cropstages          @relation(fields: [cropstageid], references: [sid], onDelete: Cascade)
+  plot               plot                @relation(fields: [plotId], references: [plotId], onDelete: Cascade)
+  plotsubstagevalues plotsubstagevalue[]
+
+  @@id([cropstageid, plotId])
 }
 
 model plotsubstagevalue {
   plotId         Int
   substagdataeid Int
-  name  String 
+  cropstageid    Int
+  startdate      DateTime?
+  enddate        DateTime?
   data           String
-  plot           plot               @relation(fields: [plotId], references: [plotId],onDelete:  Cascade)
-  substagevalue  cropsubstagesvalue @relation(fields: [substagdataeid], references: [substagedataid],onDelete: Cascade)
+  plot           plot               @relation(fields: [plotId], references: [plotId], onDelete: Cascade)
+  stagevalue     plotstagevalue     @relation(fields: [cropstageid, plotId], references: [cropstageid, plotId], onDelete: Cascade)
+  substagevalue  cropsubstagesvalue @relation(fields: [substagdataeid], references: [substagedataid], onDelete: Cascade)
 
   @@id([plotId, substagdataeid])
+}
+
+model plotweatherData {
+  plotweatherid Int      @id @default(autoincrement())
+  plotId        Int
+  temp          Int
+  datetime      DateTime
+  plot          plot     @relation(fields: [plotId], references: [plotId], onDelete: Cascade)
 }

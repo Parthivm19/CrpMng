@@ -17,11 +17,12 @@ export const CropSideBar = ({
       ssr: false,
     },
   );
+  if(crop){
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-lg col-span-1 flex h-screen flex-col w-full">
       <div className="relative w-full h-72 ">
         <Image
-          src={crop.cropImage}
+          src={crop.cropImage||""}
           alt="Crop Image"
           width={1000}
           height={1000}
@@ -46,7 +47,7 @@ export const CropSideBar = ({
       <div className="flex-grow px-8 py-8">
         {plots.length != 0 && (
           <MapCard
-            dataColors={{ [crop.cropName]: crop.cropColor }}
+            dataColors={{ [crop.cropName]: crop.cropColor||"#545252" }}
             showFilter={false}
             Plots={plots}
             key={1}
@@ -56,3 +57,4 @@ export const CropSideBar = ({
     </div>
   );
 };
+}

@@ -18,7 +18,7 @@ import {
   User,
   Users,
 } from "lucide-react";
-export type newCreationType = "Farmer" | "Crop";
+export type newCreationType = "Farmer" | "Crop" | "Plot";
 import { ActivityConfig } from "../crops/[id]/utils/cropActions";
 export const newCreationForms: Record<newCreationType, ActivityConfig> = {
   Farmer: {
@@ -176,6 +176,35 @@ export const newCreationForms: Record<newCreationType, ActivityConfig> = {
         name: "cropColor",
         type: "color",
         placeholder: "Enter Crop ",
+      },
+    ],
+  },
+  Plot: {
+    heading: "Add New Plot",
+    inputs: [
+      {
+        sub: "Add New Coordinates",
+        name: "plotCords",
+        placeholder: "Add New ",
+        type: "text",
+      },
+      {
+        sub: "Add Address",
+        name: "address",
+        placeholder: "Enter Address ",
+        type: "text",
+      },
+      {
+        sub: "Add Location",
+        name: "location",
+        placeholder: "Enter Location ",
+        type: "text",
+      },
+      {
+        sub: "Add Plot Image",
+        name: "plotImage",
+        placeholder: "Enter Farmer ID ",
+        type: "url",
       },
     ],
   },

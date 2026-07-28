@@ -3,7 +3,7 @@ dotenv.config();
 import {
   selectedPlot,
   fullFarmerDetails,
-  CropGridType,
+  CropType,
   IndivitualCrop,
   fullPlotDetails,
 } from "../../../../utils/types";
@@ -47,11 +47,14 @@ router.get("/getMapDetails", async (req, res) => {
     select: {
       plotId: true,
       farmerId: true,
+      status:true,
       address: true,
       location: true,
       plotCords: true,
       plotImage: true,
-      cropplottables: { select: { cid: { select: { cropName: true } } } },
+      cropplottables: {
+        select: { cid: { select: { cropId:true,cropName: true, cropColor: true } } },
+      },
       fid: {
         select: {
           farmerName: true,
@@ -70,12 +73,14 @@ router.get("/getMapDetails", async (req, res) => {
   if (response) {
     const formattedResp: selectedPlot[] = response.map((crop) => ({
       agentId: crop.fid.agentId,
-      crop: crop.cropplottables[0]?.cid.cropName || "unassigned",
+      status:crop.status,
+      crop:crop.cropplottables[0]?.cid||null,
+      cropId:crop.cropplottables[0]?.cid.cropId||-1,
       farmerId: crop.farmerId,
       farmerPic: crop.fid.farmerPic,
       farmerName: crop.fid.farmerName,
       location: crop.location,
-      plot: crop.plotCords as LatLngTuple[],
+      plotCords: crop.plotCords as LatLngTuple[],
       plotId: crop.plotId,
       plotImage: crop.plotImage,
       noOfPlots: crop._count.cropplottables,
@@ -313,7 +318,7 @@ router.get("/getCrops", async (req, res) => {
     },
   });
   if (resp) {
-    const formattedResp: CropGridType[] = resp.map((crop) => ({
+    const formattedResp: CropType[] = resp.map((crop) => ({
       cropId: crop.cropId,
       cropColor: crop.cropColor,
       cropImage: crop.cropImage,
@@ -634,27 +639,76 @@ router.get("/getPlotDetails/:id", async (req, res) => {
       farmerId: true,
       fid: {
         select: {
+          farmerName:true,
           agentId: true,
+          aaid:{
+            select:{
+              agentName:true,
+            }
+          } 
         },
       },
       plotCords: true,
       plotImage: true,
+      plotstagevalues:{
+        where:{
+          plotId:parseInt(id),
+        },
+        select:{
+          cropstageid:true,
+          plotstagevalue:true,
+          status:true,
+          startdate:true,
+          endDate:true,
+          plotsubstagevalues:{select: {
+    substagevalue: {
+      select: {
+        substagecoloumn: true,    
+        substage: {
+          select: {
+            substagename: true,
+          },
+        },
+      },
+    },
+    data: true,
+    startdate: true,
+    enddate: true,
+    substagdataeid: true,
+  },},
+
+        }
+      },
+      status:true,
       cropplottables: {
         select: {
           cid: {
             select: {
+              cropId:true,
               cropName: true,
+              cropColor: true,
               cropStages: {
                 select: {
                   stagename: true,
+                  duration:true,
+                  plotstagevalues:{
+                    where:{
+                      plotId:parseInt(id)
+                    },
+                    select:{
+                      startdate:true,
+                      endDate:true,
+                      status:true,
+                    },
+                  },
                   cropsubstages: {
                     select: {
                       substagename: true,
                       cropsubstagesvalues: {
                         select: {
                           plotsubstagevalues: {
+                            where:{plotId:parseInt(id)},
                             select: {
-                              name: true,
                               data: true,
                               substagevalue: true,
                             },
@@ -675,16 +729,20 @@ router.get("/getPlotDetails/:id", async (req, res) => {
       },
     },
   });
+  res.json({resp})
   if (resp) {
     const formattedResp: fullPlotDetails = {
       agentId: resp.fid.agentId,
+      status:resp.status,
       plotId: resp.plotId,
       farmerId: resp.farmerId,
-      crop: resp.cropplottables[0]?.cid?.cropName ?? "",
+      farmerName:resp.fid.farmerName,
+      agentName:resp.fid.aaid.agentName,
+      crop:resp.cropplottables[0]?.cid||null,
+      cropId:resp.cropplottables[0]?.cid.cropId||-1,
       location: resp.location,
-      plot: (resp.plotCords ?? []) as LatLngTuple[],
+      plotCords: (resp.plotCords ?? []) as LatLngTuple[],
       plotImage: resp.plotImage,
-
       cropData: resp.cropplottables.map((cp) => ({
         cropStages: cp.cid.cropStages,
       })),
@@ -706,13 +764,22 @@ router.get("/getPlotDetailsByFarmer/:id", async (req, res) => {
       address: true,
       location: true,
       plotCords: true,
+      plotsubstagevalues: true,
       plotImage: true,
-      cropplottables: { select: { cid: { select: { cropName: true } } } },
+      status:true,
+      cropplottables: {
+        select: { cid: { select: { cropName: true, cropId:true,cropColor: true } } },
+      },
       fid: {
         select: {
           farmerName: true,
           farmerPic: true,
           agentId: true,
+          aaid: {
+            select: {
+              agentName: true,
+            },
+          },
         },
       },
       _count: {
@@ -725,16 +792,33 @@ router.get("/getPlotDetailsByFarmer/:id", async (req, res) => {
   if (response) {
     const formattedResp: selectedPlot[] = response.map((crop) => ({
       agentId: crop.fid.agentId,
-      crop: crop.cropplottables[0]?.cid.cropName || "unassigned",
+      status:crop.status,
+      crop: crop.cropplottables[0]?.cid||null,
+      cropId:crop.cropplottables[0]?.cid.cropId||-1,
       farmerId: crop.farmerId,
       farmerPic: crop.fid.farmerPic,
       farmerName: crop.fid.farmerName,
       location: crop.location,
-      plot: crop.plotCords as LatLngTuple[],
+      plotCords: crop.plotCords as LatLngTuple[],
       plotId: crop.plotId,
       plotImage: crop.plotImage,
       noOfPlots: crop._count.cropplottables,
+      agentName: crop.fid.aaid.agentName,
     }));
     res.json({ data: formattedResp });
   }
+});
+
+router.post("/addPlot", async (req, res) => {
+  const data = req.body;
+  const response = await client.plot.create({
+    data: {
+      address: data.address,
+      location: data.location,
+      plotCords: data.plotCords,
+      plotImage: data.plotImage,
+      farmerId: data.farmerId,
+    },
+  });
+  res.json("OK");
 });

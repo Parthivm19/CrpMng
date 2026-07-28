@@ -121,10 +121,10 @@ export default function FarmerDetailsPage({
 
   return (
     <div className="min-h-screen">
-      <div className="w-full mx-auto px-4 sm:px-6 py-5">
+      <div className="w-full mx-auto px-4 sm:px-6 pt-2">
         <Link
           href="/admin/farmers"
-          className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-800 transition-colors font-bold text-[10px] tracking-[0.2em] uppercase mb-8 group"
+          className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-800 transition-colors font-bold text-[10px] tracking-[0.2em] uppercase mb-4 group"
         >
           <ArrowLeft
             size={14}
@@ -132,7 +132,7 @@ export default function FarmerDetailsPage({
           />
           Back to Directory
         </Link>
-        <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+        <div className="flex flex-col  lg:flex-row gap-6 items-stretch">
           <FarmerSideCard
             farmer={farmer}
             handleCancel={handleCancel}
@@ -150,7 +150,7 @@ export default function FarmerDetailsPage({
             handleSave={handleSave}
           />
         </div>
-        <div className="h-12" />
+        
       </div>
     </div>
   );

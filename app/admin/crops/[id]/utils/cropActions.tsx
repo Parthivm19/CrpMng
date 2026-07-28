@@ -99,6 +99,7 @@ export type FormActivityType =
   | "Update Activity"
   | "Update Sub-Activity"
   | "Update Sub-Activity-Coloumn";
+
 export interface FormInput {
   sub: string;
   name: string;

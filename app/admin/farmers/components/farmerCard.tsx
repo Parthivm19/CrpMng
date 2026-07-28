@@ -17,7 +17,7 @@ export const FarmersCard = ({
         <div className="p-5">
           <div className="flex gap-4 mb-4">
             <Image
-              src={data.farmerPic}
+              src={data.farmerPic||""}
               alt={data.farmerName}
               width={64}
               height={64}

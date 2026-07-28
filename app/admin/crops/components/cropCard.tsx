@@ -3,13 +3,13 @@
 import Image from "next/image";
 import { Users, Map } from "lucide-react";
 import Link from "next/link";
-import { CropGridType } from "../../utils/types";
+import { CropType } from "../../utils/types";
 import { Trash2 } from "lucide-react";
 export const CropCard = ({
   data,
   onDeleteClick,
 }: {
-  data: CropGridType;
+  data: CropType;
   onDeleteClick?: () => void;
 }) => {
   return (
@@ -17,7 +17,7 @@ export const CropCard = ({
       <Link href={"crops/" + data.cropId}>
         <div className="relative z-10 h-40 w-full">
           <Image
-            src={data.cropImage}
+            src={data.cropImage||""}
             alt={data.cropName}
             fill
             className="object-cover rounded-t-xl"
@@ -34,12 +34,12 @@ export const CropCard = ({
           <div className="flex justify-between text-sm">
             <div className="flex items-center gap-2">
               <Users className="w-4 h-4 text-green-600" />
-              <span>{data.stats.totalFarmers}</span>
+              <span>{data.stats?.totalFarmers||0}</span>
             </div>
 
             <div className="flex items-center gap-2">
               <Map className="w-4 h-4 text-blue-600" />
-              <span>{data.stats.totalPlots}</span>
+              <span>{data.stats?.totalPlots||0}</span>
             </div>
 
             {/* <div className="flex items-center gap-2">

@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Hero from "../components/Dashhero";
 import { filterType } from "../utils/types";
 import axios from "axios";
-import { CropGridType } from "../utils/types";
+import { CropType } from "../utils/types";
 
 interface newCropType {
   heading: string;
@@ -18,7 +18,7 @@ interface newCropType {
 export default function Crops() {
   const [searchValue, setSearchValue] = useState("");
   const [filters, setFilters] = useState<filterType[]>([]);
-  const [data, setData] = useState<CropGridType[]>([]);
+  const [data, setData] = useState<CropType[]>([]);
   const newType: newCropType = {
     heading: "Add New Crop",
     inputs: {
@@ -53,7 +53,7 @@ export default function Crops() {
         setSearchValue={setSearchValue}
         searchBarPlaceHolder="Search Crops (ID or Name)"
       />
-      <Grid<CropGridType, newCropType, formDataType>
+      <Grid<CropType, newCropType, formDataType>
         newData={"Crop"}
         searchValue={searchValue}
         searchColoumn="cropName"

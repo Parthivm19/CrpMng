@@ -1,6 +1,7 @@
+"use client";
 import { motion } from "framer-motion";
 import { selectedColoumn } from "../crops/[id]/components/cropMainData";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, X } from "lucide-react";
 import { ActivityConfig, FormInput } from "../crops/[id]/utils/cropActions";
 import { useEffect } from "react";
 
@@ -48,7 +49,7 @@ export const Form = <T extends { [key: string]: any }>({
         transition={{ duration: 0.4 }}
         className="w-full bg-white border border-gray-100 rounded-3xl shadow-xl overflow-hidden flex flex-col"
       >
-        <div className="bg-gray-50/50 p-6 border-b border-gray-100">
+        <div className="bg-gray-50/50 flex justify-between p-6 border-b border-gray-100">
           <div className="flex items-center">
             <div className="px-2 bg-blue-100 text-blue-600 rounded-lg">
               <PlusCircle size={20} />
@@ -57,6 +58,7 @@ export const Form = <T extends { [key: string]: any }>({
               {activity?.heading}
             </h3>
           </div>
+          <div onClick={()=>setShowOverLay(false)} className="h-5 text-red-300 hover:text-red-600 transition-colors duration-300 hover:"><X/></div>
         </div>
 
         <div
@@ -117,7 +119,13 @@ export const Form = <T extends { [key: string]: any }>({
           ))}
         </div>
 
-        <div className="px-6 pb-6">
+        <div className="px-6 flex gap-3 pb-6">
+             <button
+            onClick={()=>setShowOverLay(false)}
+            className="w-full py-3 bg-red-100 hover:bg-red-200 text-red-600 hover:text-red-800 border border-red-300 font-medium rounded-xl transition-all shadow-lg duration-150"
+          >
+            Cancel
+          </button>
           <button
             type="submit"
             className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-all shadow-lg shadow-blue-500/20 active:scale-[0.98]"

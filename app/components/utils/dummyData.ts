@@ -7,7 +7,7 @@ export const Plots: plotType[] = [
     farmerId: 1,
     location: "Kochi",
     crop: "CHILLI",
-    plot: [
+    plotCords: [
       [9.931, 76.267],
       [9.9315, 76.267],
       [9.9315, 76.2675],
@@ -21,7 +21,7 @@ export const Plots: plotType[] = [
     farmerId: 1,
     location: "Kochi",
     crop: "TURMERIC",
-    plot: [
+    plotCords: [
       [9.9316, 76.267],
       [9.9322, 76.267],
       [9.9322, 76.2676],
@@ -36,7 +36,7 @@ export const Plots: plotType[] = [
     farmerId: 1,
     location: "Kochi",
     crop: "GINGER",
-    plot: [
+    plotCords: [
       [9.931, 76.2676],
       [9.9315, 76.2676],
       [9.9317, 76.268],
@@ -50,7 +50,7 @@ export const Plots: plotType[] = [
     farmerId: 2,
     location: "Kochi",
     crop: "MARIGOLD",
-    plot: [
+    plotCords: [
       [9.9316, 76.2676],
       [9.9322, 76.2676],
       [9.9324, 76.2682],
@@ -64,7 +64,7 @@ export const Plots: plotType[] = [
     farmerId: 2,
     location: "Kochi",
     crop: "CHILLI",
-    plot: [
+    plotCords: [
       [9.931, 76.2662],
       [9.9316, 76.2662],
       [9.9318, 76.2668],
@@ -78,7 +78,7 @@ export const Plots: plotType[] = [
     farmerId: 3,
     location: "Thiruvananthapuram",
     crop: "TURMERIC",
-    plot: [
+    plotCords: [
       [8.524, 76.9365],
       [8.5246, 76.9365],
       [8.5246, 76.9371],
@@ -92,7 +92,7 @@ export const Plots: plotType[] = [
     farmerId: 3,
     location: "Thiruvananthapuram",
     crop: "GINGER",
-    plot: [
+    plotCords: [
       [8.524, 76.9372],
       [8.5246, 76.9372],
       [8.5248, 76.9378],
@@ -106,7 +106,7 @@ export const Plots: plotType[] = [
     farmerId: 3,
     location: "Thiruvananthapuram",
     crop: "MARIGOLD",
-    plot: [
+    plotCords: [
       [8.5247, 76.9365],
       [8.5253, 76.9365],
       [8.5253, 76.9371],
@@ -120,7 +120,7 @@ export const Plots: plotType[] = [
     farmerId: 4,
     location: "Kozhikode",
     crop: "CHILLI",
-    plot: [
+    plotCords: [
       [11.2585, 76.78],
       [11.2591, 76.78],
       [11.2591, 76.7806],
@@ -134,7 +134,7 @@ export const Plots: plotType[] = [
     farmerId: 4,
     location: "Kozhikode",
     crop: "TURMERIC",
-    plot: [
+    plotCords: [
       [11.2585, 76.7807],
       [11.2591, 76.7807],
       [11.2593, 76.7813],
@@ -148,7 +148,7 @@ export const Plots: plotType[] = [
     farmerId: 5,
     location: "Thrissur",
     crop: "GINGER",
-    plot: [
+    plotCords: [
       [10.5275, 76.2143],
       [10.5281, 76.2143],
       [10.5281, 76.2149],
@@ -162,7 +162,7 @@ export const Plots: plotType[] = [
     farmerId: 5,
     location: "Thrissur",
     crop: "MARIGOLD",
-    plot: [
+    plotCords: [
       [10.5275, 76.215],
       [10.5281, 76.215],
       [10.5283, 76.2156],
@@ -176,7 +176,7 @@ export const Plots: plotType[] = [
     farmerId: 6,
     location: "Alappuzha",
     crop: "CHILLI",
-    plot: [
+    plotCords: [
       [9.498, 76.3387],
       [9.4986, 76.3387],
       [9.4986, 76.3393],
@@ -190,7 +190,7 @@ export const Plots: plotType[] = [
     farmerId: 6,
     location: "Alappuzha",
     crop: "TURMERIC",
-    plot: [
+    plotCords: [
       [9.498, 76.3394],
       [9.4986, 76.3394],
       [9.4988, 76.34],
@@ -204,7 +204,7 @@ export const Plots: plotType[] = [
     farmerId: 7,
     location: "Kottayam",
     crop: "GINGER",
-    plot: [
+    plotCords: [
       [9.5915, 76.522],
       [9.5921, 76.522],
       [9.5921, 76.5226],
@@ -218,7 +218,7 @@ export const Plots: plotType[] = [
     farmerId: 7,
     location: "Kottayam",
     crop: "MARIGOLD",
-    plot: [
+    plotCords: [
       [9.5915, 76.5227],
       [9.5921, 76.5227],
       [9.5923, 76.5233],
@@ -232,7 +232,7 @@ export const Plots: plotType[] = [
     farmerId: 8,
     location: "Palakkad",
     crop: "CHILLI",
-    plot: [
+    plotCords: [
       [10.7866, 76.6547],
       [10.7872, 76.6547],
       [10.7872, 76.6553],
@@ -246,7 +246,7 @@ export const Plots: plotType[] = [
     farmerId: 8,
     location: "Palakkad",
     crop: "TURMERIC",
-    plot: [
+    plotCords: [
       [10.7866, 76.6554],
       [10.7872, 76.6554],
       [10.7874, 76.656],
@@ -260,7 +260,7 @@ export const Plots: plotType[] = [
     farmerId: 9,
     location: "Kannur",
     crop: "GINGER",
-    plot: [
+    plotCords: [
       [11.8744, 75.3703],
       [11.875, 75.3703],
       [11.875, 75.3709],
@@ -274,7 +274,7 @@ export const Plots: plotType[] = [
     farmerId: 9,
     location: "Kannur",
     crop: "MARIGOLD",
-    plot: [
+    plotCords: [
       [11.8744, 75.371],
       [11.875, 75.371],
       [11.8752, 75.3716],

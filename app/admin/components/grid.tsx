@@ -40,7 +40,6 @@ export const Grid = <
   const inputs = Object.keys(inputValues?.inputs || {});
   const initialState = Object.fromEntries(inputs.map((key) => [key, ""])) as C;
   const [formData, setFormData] = useState<C>(initialState);
-  useEffect(() => console.log(formData, "Pranayam"), []);
   const filteredData = data.filter((item) => {
     const search = searchValue.toLowerCase().trim();
     const searchMatch =
@@ -76,7 +75,7 @@ export const Grid = <
   if (filteredData.length === 0) {
     return <div className="text-center py-10 text-gray-500">No data found</div>;
   }
-
+  console.log("Okkok", formData);
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mx-5 mt-10">

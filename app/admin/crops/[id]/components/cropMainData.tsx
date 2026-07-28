@@ -22,12 +22,12 @@ export const CropMainData = ({
   const [trackSubStageOpen, setTrackSubStageOpen] = useState<number[]>([]);
   const [showOverLay, setShowOverLay] = useState(false);
   const [activity, setActivity] = useState("");
-  const [datacolors, setDataColors] = useState<colorData>({});
   const [selectedColoumn, setSelectedColoumn] = useState<selectedColoumn>({
     id: 0,
     name: "",
   });
   const [formData, setFormData] = useState<any>({});
+  console.log(formData);
   const formActivities = Object.keys(cropForms);
   const deleteActivities = Object.keys(deleteValues);
   return (

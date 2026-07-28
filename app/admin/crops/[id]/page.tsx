@@ -29,12 +29,15 @@ export default function CropPage() {
       if (crop && crop.plots) {
         const formattedPlots: selectedPlot[] = crop.plots.map((plot) => ({
           agentId: plot.pid.fid.agentId,
-          crop: crop.cropName,
+          crop: crop,
+          cropId:crop.cropId,
           farmerName: plot.pid.fid.farmerName,
           farmerId: plot.pid.fid.farmerId,
           farmerPic: plot.pid.fid.farmerPic,
           location: plot.pid.location,
-          noOfPlots: crop.stats.totalPlots,
+          noOfPlots: crop.stats?.totalPlots,
+          cropColor:crop.cropColor,
+          plotCords:plot.pid.plotCords,
           plot: plot.pid.plotCords as LatLngTuple[],
           plotId: plot.pid.plotId,
           plotImage: plot.pid.plotImage,

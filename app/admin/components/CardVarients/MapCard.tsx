@@ -12,9 +12,8 @@ import {
   Tooltip,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -25,73 +24,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { colorData } from "../dashBoard";
-// const colourOptions = {
-//   CHILLI: { color: "red", fillOpacity: 0.6 },
-//   TURMERIC: { color: "yellow", fillOpacity: 0.8 },
-//   GINGER: { color: "green", fillOpacity: 0.6 },
-//   MARIGOLD: { color: "orange", fillOpacity: 0.6 },
-// };
-const markerIcon = L.icon({
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
-
-const centerCalculator = (vertices: LatLngTuple[]): LatLngTuple => {
-  if (vertices.length < 3) return vertices[0];
-
-  const lat0 = vertices[0][0];
-  const lng0 = vertices[0][1];
-
-  let sumX = 0;
-  let sumY = 0;
-
-  vertices.forEach(([lat, lng]) => {
-    const x = (lng - lng0) * 111320 * Math.cos((lat0 * Math.PI) / 180);
-    const y = (lat - lat0) * 111320;
-    sumX += x;
-    sumY += y;
-  });
-  const cx = sumX / vertices.length;
-  const cy = sumY / vertices.length;
-  const centerLng = lng0 + cx / (111320 * Math.cos((lat0 * Math.PI) / 180));
-  const centerLat = lat0 + cy / 111320;
-
-  return [centerLat, centerLng];
-};
-
-const AreaCalculator = (vertices: LatLngTuple[]): number => {
-  if (vertices.length < 3) return 0;
-  const lat0 = vertices[0][0];
-  const meterVertices = vertices.map(([lat, lon]) => {
-    const x =
-      (lon - vertices[0][1]) * 111320 * Math.cos((lat0 * Math.PI) / 180);
-    const y = (lat - vertices[0][0]) * 111320;
-    return [x, y];
-  });
-  const n = meterVertices.length;
-  let sum1 = 0;
-  let sum2 = 0;
-
-  for (let i = 0; i < n - 1; i++) {
-    sum1 += meterVertices[i][0] * meterVertices[i + 1][1];
-    sum2 += meterVertices[i][1] * meterVertices[i + 1][0];
-  }
-  sum1 += meterVertices[n - 1][0] * meterVertices[0][1];
-  sum2 += meterVertices[n - 1][1] * meterVertices[0][0];
-
-  let area = Math.abs(sum1 - sum2) / 2;
-  area = Number(area.toFixed(3));
-  return area;
-};
+import { AreaCalculator,centerCalculator } from "./utils/mapUtils";
 const MapUpdater = ({ lat, lng }: { lat: number; lng: number }) => {
   const map = useMap();
-
+  console.log(lat,lng)
   useEffect(() => {
     if (!lat || !lng) return;
     map.flyTo([lat, lng], map.getZoom(), { duration: 2 });
@@ -100,17 +36,37 @@ const MapUpdater = ({ lat, lng }: { lat: number; lng: number }) => {
   return null;
 };
 
+
 export const MapCardClient = ({
   Plots,
   showFilter,
   dataColors,
+  goToPlot
 }: {
   Plots: selectedPlot[];
   showFilter: boolean;
   dataColors: colorData;
+  goToPlot?:selectedPlot|null
 }) => {
-  const filters = ["Select Crop"];
-  filters.push(...Object.keys(dataColors));
+  console.log(Plots,"Colors")
+  const markerIcon = useMemo(
+    () =>
+      L.icon({
+        iconUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+        shadowUrl:
+          "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      }),
+    [],
+  );
+  const filters = useMemo(
+    () => ["Select Crop", ...Object.keys(dataColors)],
+    [dataColors],
+  );
 
   const cardAnimationLeft = {
     x: -100,
@@ -125,31 +81,41 @@ export const MapCardClient = ({
   const [selectedCrop, setSelectedCrop] = useState("Select Crop");
   const [selectedPlot, setSelectedPlot] = useState<selectedPlot | null>(null);
   const [exitDir, setExitdir] = useState<"Right" | "Down">("Down");
-      const validLocations = Object.values(
-      Plots.filter((area) =>
-        selectedCrop !== "Select Crop" ? area.crop === selectedCrop : true,
-      ).reduce(
-        (acc, curr) => {
-          if (!acc[curr.location]) {
-            acc[curr.location] = curr;
-          }
-          return acc;
-        },
-        {} as Record<string, (typeof Plots)[number]>,
-      ),
-    );
-    const lastValidCenter = useRef<LatLngTuple>([
-      validLocations?.[currentLocation]?.plot?.[0]?.[0] ?? 10,
-      validLocations?.[currentLocation]?.plot?.[0]?.[1] ?? 76,
-    ]);
+  const [flyTarget, setFlyTarget] = useState<{ lat: number; lng: number } | null>(null);
+
+useEffect(() => {
+  if (goToPlot?.plotCords?.length) {
+    setSelectedPlot(goToPlot);
+    setExitdir("Right");
+    setFlyTarget({
+      lat: goToPlot.plotCords[0][0],
+      lng: goToPlot.plotCords[0][1],
+    });
+  }
+}, [goToPlot]);
+  const validLocations = Object.values(
+    Plots.filter((area) =>
+      selectedCrop !== "Select Crop" ? area.crop?.cropName === selectedCrop : true,
+    ).reduce(
+      (acc, curr) => {
+        if (!acc[curr.location]) {
+          acc[curr.location] = curr;
+        }
+        return acc;
+      },
+      {} as Record<string, (typeof Plots)[number]>,
+    ),
+  );
+  const lastValidCenter = useRef<LatLngTuple>([
+    validLocations?.[currentLocation]?.plotCords?.[0]?.[0] ?? 10,
+    validLocations?.[currentLocation]?.plotCords?.[0]?.[1] ?? 76,
+  ]);
   if (Plots != null) {
     const selectedCropPlot: selectedPlot[] = Plots.filter((area) =>
       selectedCrop != "Select Crop"
-        ? area.crop == selectedCrop
-        : area.crop.includes(""),
+        ? area.crop?.cropName == selectedCrop
+        : true,
     );
-
-
 
     const changePosPlus = () => {
       setCurrentLocation((prev) => (prev + 1) % validLocations.length);
@@ -161,12 +127,13 @@ export const MapCardClient = ({
       );
     };
 
-    const hasValidPlot = validLocations?.[currentLocation]?.plot?.length > 0;
+    const hasValidPlot =
+      validLocations?.[currentLocation]?.plotCords?.length > 0;
 
     if (hasValidPlot) {
       lastValidCenter.current = [
-        validLocations[currentLocation].plot[0][0],
-        validLocations[currentLocation].plot[0][1],
+        validLocations[currentLocation].plotCords[0][0],
+        validLocations[currentLocation].plotCords[0][1],
       ];
     }
 
@@ -181,7 +148,7 @@ export const MapCardClient = ({
           scrollWheelZoom={false}
         >
           {hasValidPlot && <MapUpdater lat={center[0]} lng={center[1]} />}
-
+        {flyTarget && <MapUpdater lat={flyTarget.lat} lng={flyTarget.lng} />}
           <TileLayer
             attribution="© Esri, Maxar, Earthstar Geographics"
             url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
@@ -192,37 +159,39 @@ export const MapCardClient = ({
           opacity={0.3}
         /> */}
           {selectedCropPlot.map((area, i) => {
-            const center: LatLngTuple = centerCalculator(area.plot);
-            return (
-              <React.Fragment key={i}>
-                <Polygon
-                  positions={area.plot}
-                  pathOptions={{
-                    color: dataColors[area.crop],
-                    fillColor: dataColors[area.crop],
-                    fillOpacity: 0.6,
-                  }}
-                  eventHandlers={{
-                    click: () => {
-                      console.log(area);
-                      setExitdir("Right");
-                      setSelectedPlot({
-                        ...area,
-                        farmerName: area.farmerName,
-                        farmerPic: area.farmerPic,
-                        noOfPlots: area.noOfPlots,
-                        phone: area.phone,
-                      });
-                    },
-                  }}
-                >
-                  <Tooltip>{area.crop}</Tooltip>
-                </Polygon>
-                <Marker position={[center[0], center[1]]} icon={markerIcon}>
-                  <Popup>{area.location}</Popup>
-                </Marker>
-              </React.Fragment>
-            );
+            if (area.plotCords) {
+              const center: LatLngTuple = centerCalculator(area.plotCords);
+              return (
+                <React.Fragment key={i}>
+                  <Polygon
+                    positions={area.plotCords}
+                    pathOptions={{
+                      color: dataColors[area.crop?.cropName ||"#545252"],
+                      fillColor: dataColors[area.crop?.cropName ||"#545252"],
+                      fillOpacity: 0.6,
+                    }}
+                    eventHandlers={{
+                      click: () => {
+                        console.log(area);
+                        setExitdir("Right");
+                        setSelectedPlot({
+                          ...area,
+                          farmerName: area.farmerName,
+                          farmerPic: area.farmerPic,
+                          noOfPlots: area.noOfPlots,
+                          phone: area.phone,
+                        });
+                      },
+                    }}
+                  >
+                    <Tooltip>{area.crop?.cropName}</Tooltip>
+                  </Polygon>
+                  <Marker position={[center[0], center[1]]} icon={markerIcon}>
+                    <Popup>{area.location}</Popup>
+                  </Marker>
+                </React.Fragment>
+              );
+            }
           })}
         </MapContainer>
 
@@ -309,17 +278,19 @@ export const MapCardClient = ({
               exit={exitDir == "Down" ? cardAnimationDown : cardAnimationLeft}
               className="absolute bottom-4 left-4 w-64 md:w-72 z-20 bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
             >
-              <Link href={"admin/farmers/" + selectedPlot.farmerId}>
+              <Link href={"/admin/farmers/" + selectedPlot.farmerId}>
                 <div className="w-full h-24 md:h-32 relative">
-                  <button
-                    className="absolute z-10 rounded-full right-2 top-2 w-8 h-8 flex items-center justify-center transition-colors bg-gray-50 hover:bg-gray-200"
-                    onClick={() => {
-                      setExitdir("Down");
-                      setTimeout(() => setSelectedPlot(null));
-                    }}
-                  >
-                    <X strokeWidth={1.5} />
-                  </button>
+                 <button
+  className="absolute z-10 rounded-full right-2 top-2 w-8 h-8 flex items-center justify-center transition-colors bg-gray-50 hover:bg-gray-200"
+  onClick={(e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setExitdir("Down");
+    setTimeout(() => setSelectedPlot(null));
+  }}
+>
+  <X strokeWidth={1.5} />
+</button>
                   <Image
                     alt="Plot Image"
                     src={selectedPlot.plotImage}
@@ -339,7 +310,7 @@ export const MapCardClient = ({
                   <div className="w-10 h-10 relative rounded-full overflow-hidden border border-gray-200">
                     <Image
                       alt="Farmer Image"
-                      src={selectedPlot.farmerPic}
+                      src={selectedPlot.farmerPic || ""}
                       fill
                       className="object-cover"
                       priority
@@ -348,8 +319,8 @@ export const MapCardClient = ({
                 </div>
 
                 <div className="px-2 pb-2 text-xs md:text-sm text-gray-700 flex justify-between">
-                  <span>Area:{AreaCalculator(selectedPlot.plot)}m²</span>
-                  <span>Crop: {selectedPlot.crop}</span>
+                  <span>Area:{AreaCalculator(selectedPlot.plotCords)}m²</span>
+                  <span>Crop: {selectedPlot.crop?.cropName}</span>
                 </div>
               </Link>
             </motion.div>

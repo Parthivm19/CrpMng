@@ -49,7 +49,7 @@ export const FarmerSideCard = ({
   handleSave: () => void;
   handleCancel: () => void;
 }) => {
-  console.log(farmer.crops);
+  console.log(farmer.crops,"Build A ");
   return (
     <div className="w-full lg:w-80 xl:w-96  flex-shrink-0 self-stretch">
       <div className="bg-white rounded-[2rem] shadow-[0_8px_40px_-8px_rgba(0,0,0,0.12)] border border-stone-100 overflow-hidden h-full flex flex-col">
@@ -105,7 +105,7 @@ export const FarmerSideCard = ({
           <div className="w-full flex flex-col gap-3">
             <StatChip
               label="Active Plots"
-              value={farmer.noOfPlots}
+              value={farmer.noOfPlots||0}
               icon={<Map size={15} />}
             />
 
@@ -132,26 +132,24 @@ export const FarmerSideCard = ({
 
             <div className="flex flex-wrap gap-2">
               {farmer.crops ? (
-                (
-            <div className="mt-3 flex flex-wrap gap-2">
-              {farmer.crops != undefined &&
-                (() => {
-                  const crops = farmer.crops;
-                  return Object.keys(crops).map((crop, i) => (
-                    <span
-                      key={i}
-                      className="px-2 py-1 text-xs text-green-700 rounded"
-                      style={{
-                        backgroundColor: crops[crop] + "20",
-                        color: `color-mix(in srgb, ${crops[crop]} 80%, black)`,
-                      }}
-                    >
-                      {crop}
-                    </span>
-                  ));
-                })()}
-            </div>
-          )
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {farmer.crops != undefined &&
+                    (() => {
+                      const crops = farmer.crops;
+                      return Object.keys(crops).map((crop, i) => (
+                        <span
+                          key={i}
+                          className="px-2 py-1 text-xs text-green-700 rounded"
+                          style={{
+                            backgroundColor: crops[crop] + "20",
+                            color: `color-mix(in srgb, ${crops[crop]} 80%, black)`,
+                          }}
+                        >
+                          {crop}
+                        </span>
+                      ));
+                    })()}
+                </div>
               ) : (
                 <span className="flex items-center gap-1.5 bg-green-50 border border-green-100 text-green-700 text-[9px] font-black uppercase tracking-widest px-3 py-2 rounded-xl">
                   No Crops
